@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - UI/UX Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #4e54c8;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 450px;
+        }
+        
+        .sidebar {
+            width: 220px;
+            background: #f5f7ff;
+            padding: 25px 15px;
+            border-right: 1px solid #e6e9f4;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            background: #e6e9f4;
+        }
+        
+        .nav-item.active {
+            background: #4e54c8;
+            color: white;
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: #f5f7ff;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            margin: 0 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card:first-child {
+            margin-left: 0;
+        }
+        
+        .stat-card:last-child {
+            margin-right: 0;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4e54c8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .task-input {
+            display: flex;
+            margin-bottom: 25px;
+        }
+        
+        .task-input input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e6e9f4;
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        
+        .task-input input:focus {
+            border-color: #4e54c8;
+        }
+        
+        .add-btn {
+            background: #4e54c8;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .add-btn:hover {
+            background: #3a3eb3;
+        }
+        
+        .task-list {
+            list-style: none;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        
+        .task-checkbox {
+            margin-right: 15px;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+        
+        .task-text {
+            flex: 1;
+            font-size: 16px;
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .task-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+        
+        .task-actions button:hover {
+            color: #4e54c8;
+        }
+        
+        .priority-high {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .priority-medium {
+            border-left: 4px solid #ffc107;
+        }
+        
+        .priority-low {
+            border-left: 4px solid #28a745;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f5f7ff;
+            color: #6c757d;
+            font-size: 14px;
+            border-top: 1px solid #e6e9f4;
+        }
+        
+        @media (max-width: 650px) {
+            .app-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e6e9f4;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .stat-card {
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TaskFlow</h1>
+            <div class="subtitle">A simple UI/UX demo application</div>
+        </header>
+        
+        <div class="app-container">
+            <div class="sidebar">
+                <div class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>My Tasks</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>Calendar</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Total Tasks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+                
+                <div class="task-input">
+                    <input type="text" placeholder="Add a new task...">
+                    <button class="add-btn">Add</button>
+                </div>
+                
+                <ul class="task-list">
+                    <li class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <span class="task-text">Complete project proposal</span>
+                        <div class="task-actions">
+                            <button><i class="fas fa-edit"></i></button>
+                            <button><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                    <li class="task-item priority-medium completed">
+                        <input type="checkbox" class="task-checkbox" checked>
+                        <span class="task-text">Buy groceries</span>
+                        <div class="task-actions">
+                            <button><i class="fas fa-edit"></i></button>
+                            <button><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                    <li class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <span class="task-text">Morning workout</span>
+                        <div class="task-actions">
+                            <button><i class="fas fa-edit"></i></button>
+                            <button><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                    <li class="task-item priority-medium completed">
+                        <input type="checkbox" class="task-checkbox" checked>
+                        <span class="task-text">Call mom</span>
+                        <div class="task-actions">
+                            <button><i class="fas fa-edit"></i></button>
+                            <button><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                    <li class="task-item priority-low completed">
+                        <input type="checkbox" class="task-checkbox" checked>
+                        <span class="task-text">Read UX book chapter</span>
+                        <div class="task-actions">
+                            <button><i class="fas fa-edit"></i></button>
+                            <button><i class="fas fa-trash"></i></button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>UI/UX Design Demo • Created with HTML, CSS, and JavaScript</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Task completion functionality
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskItem = this.parentElement;
+                    if (this.checked) {
+                        taskItem.classList.add('completed');
+                    } else {
+                        taskItem.classList.remove('completed');
+                    }
+                    updateTaskStats();
+                });
+            });
+            
+            // Add new task functionality
+            const addButton = document.querySelector('.add-btn');
+            const taskInput = document.querySelector('.task-input input');
+            
+            addButton.addEventListener('click', addNewTask);
+            taskInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addNewTask();
+                }
+            });
+            
+            function addNewTask() {
+                const taskText = taskInput.value.trim();
+                if (taskText === '') return;
+                
+                const taskList = document.querySelector('.task-list');
+                const newTask = document.createElement('li');
+                newTask.className = 'task-item priority-medium';
+                newTask.innerHTML = `
+                    <input type="checkbox" class="task-checkbox">
+                    <span class="task-text">${taskText}</span>
+                    <div class="task-actions">
+                        <button><i class="fas fa-edit"></i></button>
+                        <button><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                taskList.appendChild(newTask);
+                taskInput.value = '';
+                
+                // Add event listener to the new checkbox
+                newTask.querySelector('.task-checkbox').addEventListener('change', function() {
+                    if (this.checked) {
+                        newTask.classList.add('completed');
+                    } else {
+                        newTask.classList.remove('completed');
+                    }
+                    updateTaskStats();
+                });
+                
+                // Add event listener to the delete button
+                newTask.querySelector('.fa-trash').parentElement.addEventListener('click', function() {
+                    newTask.remove();
+                    updateTaskStats();
+                });
+                
+                updateTaskStats();
+            }
+            
+            // Navigation active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Update task statistics
+            function updateTaskStats() {
+                const totalTasks = document.querySelectorAll('.task-item').length;
+                const completedTasks = document.querySelectorAll('.task-item.completed').length;
+                const pendingTasks = totalTasks - completedTasks;
+                
+                document.querySelectorAll('.stat-number')[0].textContent = totalTasks;
+                document.querySelectorAll('.stat-number')[1].textContent = completedTasks;
+                document.querySelectorAll('.stat-number')[2].textContent = pendingTasks;
+            }
+        });
+    </script>
+</body>
+</html>
